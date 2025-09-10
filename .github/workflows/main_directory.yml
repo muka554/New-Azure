@@ -27,6 +27,8 @@ jobs:
 
       - name: Restore
         run: dotnet restore .github/workflows/MyApp.csproj
+        - name: Restore
+  run: dotnet restore .github/workflows/MyApp.csproj
 
       - name: Build
         run: dotnet build .github/workflows/MyApp.csproj --configuration Release --no-restore
@@ -39,3 +41,4 @@ jobs:
         with:
           name: net-app
           path: ${{ github.workspace }}/artifacts/myapp
+
