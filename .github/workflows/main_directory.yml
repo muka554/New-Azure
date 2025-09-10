@@ -1,25 +1,41 @@
+name: Build and publish .NET app
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+      - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.x'
+          dotnet-version: '9.x' # match the TargetFramework in your project (net9.0)
 
-      - name: Build with dotnet
-        run: dotnet build .github/workflows/MyApp.csproj --configuration Release
+      - name: Restore
+        run: dotnet restore .github/workflows/MyApp.csproj
 
-      - name: dotnet publish 
-        run: dotnet publish .github/workflows/MyApp.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+      - name: Build
+        run: dotnet build .github/workflows/MyApp.csproj --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish .github/workflows/MyApp.csproj -c Release -o "${{ github.workspace }}/artifacts/myapp" --no-build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: net-app
+          path: ${{ github.workspace }}/artifacts/myapp
