@@ -26,11 +26,10 @@ jobs:
       - name: Build with dotnet
   run: dotnet build MyApp.csproj --configuration Release
 
-- name: dotnet publish
+      - name: dotnet publish
   run: dotnet publish MyApp.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -57,4 +56,5 @@ jobs:
           package: .
 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F9648443A1294C00A0C4EEFA7D2044E5 }}
+
 
